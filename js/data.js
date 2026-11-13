@@ -353,12 +353,18 @@ const ABOUT = {
   logo: 'assets/logo/horizontal-tagline.png',
   photo: { src: 'assets/photos/0928-group.jpg', cap: '9.28 首场 Workshop 大合照' },
   stats: [ { n: '40+', label: '社员' }, { n: '3', label: '场活动' }, { n: '4.6', label: '首场满意度 / 5' }, { n: '2', label: '所学校联合' } ],
-  team: [
-    { name: 'Hejia', role: '社长 · 活动统筹', color: '#2F6DC2' },
-    { name: 'Viper', role: 'Workshop 主讲 · 灵感公社', color: '#F28FAB' },
-    { name: 'Jerry', role: '主持 · 签到', color: '#EBCB00' },
-    { name: 'Helpers', role: '小组辅助 · 设计 · 摄影', color: '#5CB87A' },
-  ],
+  // 核心团队：leads 是社长 / 副社长，depts 是各部门成员
+  team: {
+    leads: [
+      { name: '陈禾佳', alias: '双月', role: '社长' },
+      { name: '徐奥峰', role: '副社长' },
+    ],
+    depts: [
+      { name: '技术部', en: 'TECH', color: '#2F6DC2', soft: '#E3EEFB', members: ['尹瑞雪', '徐子涵', '汪晨旭', '田雨顺', '董馨妤', '肖芷晴'] },
+      { name: '活动部', en: 'EVENTS', color: '#E0628A', soft: '#FCE4EC', members: ['陈嘉毅', '李家顺', '崔玉玺', '何昕'] },
+      { name: '运营部', en: 'OPERATIONS', color: '#C9A800', soft: '#FFF6C2', members: ['孙嘉悦', '章芯蕾', '寿陆蕾'] },
+    ],
+  },
   timeline: [
     { when: '2026.09', what: '向 USU 申请成立 Vibe Coding Club' },
     { when: '2026.09.28', what: '首场活动「Hello, Vibe!」个人网站 Workshop，40 人到场，SUPRA 赞助' },

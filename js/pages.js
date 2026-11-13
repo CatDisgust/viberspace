@@ -186,9 +186,18 @@ const PAGES = {
         <li>${pinIcon(i + 1)}<b class="sg">${esc(t.when)}</b><span>${esc(t.what)}</span></li>`).join('')}
       </ol>
 
-      ${sh('THE TEAM', '核心团队')}
-      <div class="team">${ABOUT.team.map(m => `
-        <div class="member"><div class="avatar" style="--c:${m.color}">${esc([...m.name][0])}</div><b>${esc(m.name)}</b><span>${esc(m.role)}</span></div>`).join('')}
+      ${sh('THE TEAM', '核心团队', `<span class="team-count">${ABOUT.team.leads.length + ABOUT.team.depts.reduce((a, d) => a + d.members.length, 0)} 人</span>`)}
+      <div class="leads">${ABOUT.team.leads.map((m, i) => `
+        <div class="lead">
+          <div class="avatar avatar-lg" style="--c:${i ? '#E8463B' : '#2F6DC2'}">${esc([...m.name].pop())}</div>
+          <div><span class="lead-role">${esc(m.role)}</span><b>${esc(m.name)}</b>${m.alias ? `<small>${esc(m.alias)}</small>` : ''}</div>
+        </div>`).join('')}
+      </div>
+      <div class="depts">${ABOUT.team.depts.map(d => `
+        <section class="dept" style="--c:${d.color};--s:${d.soft}">
+          <header><span class="sg">${esc(d.en)}</span><h3>${esc(d.name)}</h3><em>${d.members.length} 人</em></header>
+          <ul>${d.members.map(n => `<li><span class="avatar avatar-sm">${esc([...n].pop())}</span>${esc(n)}</li>`).join('')}</ul>
+        </section>`).join('')}
       </div>`;
   },
 
