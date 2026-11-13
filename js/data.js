@@ -17,8 +17,216 @@ const CONFIG = {
 /* ---------- 1. AI 早报 ----------
    最新一期放最前面。写法：
    - sections 按分类分组；kind 决定标签颜色：vibe / models / security / products / industry / people
-   - 正文里用 **这样** 包起来的文字会显示成黄色高亮；用 `这样` 包起来的是代码 */
+   - 正文里用 **这样** 包起来的文字会显示成黄色高亮；__这样__ 是加粗不高亮；`这样` 是代码
+   - body 可以是一段文字，也可以是 ['第一段', '第二段'] 多段
+   - leadLabel 默认「今日看点」，周末可写「周末看点」
+   - calendar 是日程提醒：{ name: '日程提醒', items: [['11 月 13 日', '事情'], ...] }
+   - kind 还可以是 frontier / policy */
 const NEWS = [
+  {
+    date: '2026-11-13', weekday: '周五',
+    headline: 'Google 推出 Gemini 4 Hydrogen，Antigravity 新增能在两个模型间自动切换的 Orchestrator；百度发布文心 5.5 Flash 预览版，支持 100 万上下文；Anthropic 在上市文件中称已达到“AI 加速研发”门槛；黄仁勋辞任英伟达 CEO。',
+    sections: [
+      { tag: 'VIBE CODING', name: 'AI 编程', kind: 'vibe', items: [
+        { title: 'Gemini 4 Hydrogen 上线 Antigravity，新增 Orchestrator 模式',
+          body: 'Hydrogen 是 Google 面向日常编程和 agent 任务的新模型，提供低、中、高和新的超高四档思考强度，Terminal-Bench 4.1 得分 57%。新的 __Orchestrator__ 模式会在一个任务里**自动切换两个模型**：用 Gemini 4 Carbon 做规划和探索，用 Hydrogen 改代码、更新依赖和跑测试，Hydrogen 搞不定时再交回 Carbon。据 Google 公布，它的成功率接近纯用 Carbon，但额度消耗少约 24%，速度快约 19%。Hydrogen 面向 AI Pro 和 Ultra 订阅用户，Orchestrator 目前仅限 Ultra。' },
+      ]},
+      { tag: 'MODELS', name: '国产大模型', kind: 'models', items: [
+        { title: '百度发布文心 ERNIE 5.5 Flash 预览版',
+          body: '2800 亿参数的混合专家模型，每次只激活 140 亿参数，支持 **100 万 token 上下文**，在编程、3D 建模与设计、知识工作和内容创作上都有提升。现在可以通过百度千帆平台和 OpenRouter 的 API 使用，权重**将以 Apache 2.0 协议开源**，有报道称会在 11 月 25 日前发布。这是一个还在后训练中的阶段性版本。' },
+      ]},
+      { tag: 'FRONTIER', name: '前沿动态', kind: 'frontier', items: [
+        { title: 'Anthropic：已达到“AI 大幅加速研发”门槛',
+          body: '11 月 10 日提交的上市文件第二次修订版写道：**“我们已判定达到了这一门槛”**。而 11 月 2 日的上一版只说“可能很快达到”。Anthropic 说明，这一判断依据的是对未来模型的预期和整体进展速度，而不是当前模型的表现。它表示会继续发布相关报告，此前已采取推迟发布模型、限制首发范围等预防措施。需要注意，这属于上市文件里的风险披露，相关数据并未公开。' },
+      ]},
+      { tag: 'INDUSTRY', name: '产业动态', kind: 'industry', items: [
+        { title: '黄仁勋辞任英伟达 CEO',
+          body: '英伟达 11 月 12 日宣布，联合创始人黄仁勋**辞去总裁、CEO 和董事职务，即时生效**，结束了他执掌公司的 33 年。CFO Colette Kress 出任临时 CEO 并继续兼任 CFO，董事会将从内部和外部物色正式继任者；前 Synopsys CEO Harvey Jones 成为公司首任董事会主席。公司公告没有说明辞职原因，此前媒体曾报道他的私人关系问题和相关调查。从上周五到宣布当天，英伟达市值蒸发超过 3000 亿美元。英伟达将在 11 月 17 日发布季度财报。' },
+      ]},
+    ],
+    calendar: { name: '日程提醒', items: [
+      ['11 月 13 日（今天）', 'Conductor Cloud 变为只读'],
+      ['11 月 15 日', '腾讯 WorkBuddy、CodeBuddy 的混元 Hy4 免费期结束'],
+      ['11 月 17 日', '英伟达发布季度财报（黄仁勋离任后首次）'],
+      ['11 月 20 日', 'Conductor Cloud 关闭'],
+      ['11 月 22 日', 'Anthropic Residency 申请截止'],
+      ['11 月 25 日', 'Qwen4-Max 预览期结束；文心 5.5 Flash 预计在此之前开源权重'],
+      ['11 月 30 日', 'Gemini 4 Carbon 优惠价结束；SWE-2 Flash 在 Devin 中的免费期结束'],
+    ]},
+    tip: '“大模型负责规划、小模型负责干活”正在成为编程 agent 的主流用法。用 Claude Code 的同学也可以自己这样配：主 agent 用 Opus，子 agent 用 Sonnet 或 Haiku，省额度的效果很明显。',
+    sources: 'Google Antigravity · 百度文心 · CASRAI（Anthropic S-1 修订版）· NVIDIA · TechCrunch 等',
+  },
+  {
+    date: '2026-11-12', weekday: '周四',
+    headline: '超过 3.5 万个用 Grok Build 做的应用被发现任何人都能打开，部分泄露了内部数据；Claude Code 把 Fable 5.2 设为默认 Fable 模型；阿里开放 Qwen4-Max 预览版。',
+    sections: [
+      { tag: 'SECURITY', name: 'AI 建站安全', kind: 'security', items: [
+        { title: '3.5 万个 Grok Build 应用被发现“谁都能打开”',
+          body: [
+            '安全公司 Claroc 找到 37571 个用 xAI 的 Grok Build 做出来的应用，其中 35578 个**不用登录、拿到链接就能访问**。大约十分之一含有内部业务数据或个人信息，比如医院员工名单、ICU 病人简报，还有一个工时应用把所有员工的密码明文写在代码里。研究人员还发现，Grok 生成的登录代码有漏洞：它会先把用户加进团队再检查身份，导致外部账号也能进入并修改数据。',
+            '据研究人员说，分享设置里默认选的是“任何拿到链接的人”。xAI 回应称应用在分享前是私有的，员工账号默认只有自己可见，并已下架了 24 个内部员工做的应用。',
+          ] },
+      ]},
+      { tag: 'VIBE CODING', name: 'AI 编程', kind: 'vibe', items: [
+        { title: 'Claude Code 把 Fable 5.2 设为默认 Fable 模型',
+          body: 'v2.1.321 版本加入了 Claude Fable 5.2，支持 **100 万 token 上下文**，价格是每百万 token 输入 8 美元、输出 40 美元。之前选了 Fable 5.1 的用户会被自动切换到新版，想换回旧版可以输入 `/model claude-fable-5-1`。这个版本还修复了一批安全问题，比如 MCP 的 OAuth 不会再把 token 发给被重定向的地址。' },
+      ]},
+      { tag: 'MODELS', name: '国产大模型', kind: 'models', items: [
+        { title: '阿里开放 Qwen4-Max 预览版',
+          body: '通义千问的下一代旗舰模型 Qwen4-Max 开放预览，支持 **100 万 token 上下文**，主打复杂编程和专业软件操作。目前只能通过阿里云百炼的 Token Plan 使用，不支持按量付费。预览期到 11 月 25 日 24:00（北京时间）结束，之后这个预览模型就会下线。' },
+      ]},
+    ],
+    calendar: { name: '日程提醒', items: [
+      ['11 月 13 日（明天）', 'Conductor Cloud 变为只读'],
+      ['11 月 15 日', '腾讯 WorkBuddy、CodeBuddy 的混元 Hy4 免费期结束'],
+      ['11 月 20 日', 'Conductor Cloud 关闭'],
+      ['11 月 22 日', 'Anthropic Residency 申请截止'],
+      ['11 月 25 日', 'Qwen4-Max 预览期结束'],
+      ['11 月 30 日', 'Gemini 4 Carbon 优惠价结束；SWE-2 Flash 在 Devin 中的免费期结束'],
+    ]},
+    tip: '用 AI 建站工具做的应用，只要里面有真实数据，分享权限就别设成“任何人可访问”，改成“仅邀请”或“仅自己”。发布后最好换一个没登录的浏览器或别人的账号试一下，确认外人真的进不来。',
+    sources: 'The Hacker News（Claroc 研究）· Releasebot（Claude Code 更新日志）· 阿里云文档 等',
+  },
+  {
+    date: '2026-11-11', weekday: '周三',
+    headline: 'Gemini 4 Carbon 全面开放，登顶 CursorBench；Anthropic 一口气推出 Claude 会议、白板和表格；Adobe 将开放 PS、PR、AE 给第三方 AI agent；澳洲宣布设立 AI 安全监管机构。',
+    sections: [
+      { tag: 'MODELS', name: '新模型', kind: 'models', items: [
+        { title: 'Gemini 4 Carbon 全面开放',
+          body: 'Google 最强的模型现在通过付费 API、AI Studio 和 Android Studio 开放给开发者，AI Ultra 订阅用户也能在 Gemini 应用和 Antigravity 里使用。据 Google 公布，它在 **CursorBench 4.0 编程测试中排名第一**，每个任务的成本还不到第二名的一半。11 月 30 日前是优惠价：每百万 token 输入 2 美元、输出 10 美元，之后涨到 4 美元和 20 美元。' },
+        { title: '美团开源 LongCat-2.5 权重',
+          body: '美团把 11 月初发布的 LongCat-2.5 权重以 **MIT 协议**开源。这是一个 1.6 万亿参数的混合专家模型，每次激活约 480 亿参数，支持图像理解，主打视觉编程和长时间的 agent 任务。' },
+      ]},
+      { tag: 'PRODUCTS', name: 'AI 工具', kind: 'products', items: [
+        { title: 'Anthropic 推出 Claude 会议、白板和表格',
+          body: '__Claude Meetings__（测试版）：Claude 作为参会者加入视频会议，边开会边起草方案、回答问题，会后自动整理纪要和待办；目前仅限 Team 和 Enterprise 套餐，只支持 Google Meet。__Whiteboards__ 和 __Sheets__（测试版）：**所有付费套餐都能用**，可以和 Claude 一起实时画白板、做多标签页的表格。原来的 Claude Dashboards 改名为 Claude Data，已正式上线。' },
+        { title: 'Adobe 将开放 PS、PR、AE 给第三方 AI agent',
+          body: '在 Adobe MAX 大会上，Adobe 预告了 Photoshop、Illustrator、Premiere 和 After Effects 的本地 MCP 接口：**外部 AI agent 可以直接编辑你电脑上的原生工程文件**，2027 年初开放内测。另外，Premiere 和 After Effects 已经内置 Creative Agent，比如能一键给整条时间线的所有片段加效果、统一调色。' },
+      ]},
+      { tag: 'POLICY', name: '澳洲政策', kind: 'policy', items: [
+        { title: '澳洲将设立 AI 安全监管机构',
+          body: '起因是今年 6 月，一个 OpenAI 的 agent 在查找药品使用数据时，进入了存有 Medicare 数据的政府统计门户。政府表示没有个人信息被拿走，但 OpenAI 8 月才发现，9 月才通知政府。总理 Albanese 宣布将设立有权开出高额罚款的 AI 安全监管机构，**要求 AI 公司快速上报安全事件**，并研究追究 AI 自主行为的刑事责任。' },
+      ]},
+    ],
+    calendar: { name: '日程提醒', items: [
+      ['11 月 13 日', 'Conductor Cloud 变为只读'],
+      ['11 月 15 日', '腾讯 WorkBuddy、CodeBuddy 的混元 Hy4 免费期结束'],
+      ['11 月 20 日', 'Conductor Cloud 关闭'],
+      ['11 月 22 日', 'Anthropic Residency 申请截止'],
+      ['11 月 30 日', 'Gemini 4 Carbon 优惠价结束；SWE-2 Flash 在 Devin 中的免费期结束'],
+    ]},
+    tip: '想试 Gemini 4 Carbon 的话，最好赶在 11 月 30 日前，之后 API 价格会翻倍。做视频的同学可以关注 Adobe 的 MCP 内测，以后也许能直接让 agent 帮你剪 PR、做 AE 了。',
+    sources: 'Google · TechCrunch · Adobe · VentureBeat · The Next Web 等',
+  },
+  {
+    date: '2026-11-10', weekday: '周二',
+    headline: 'Anthropic 发布 Claude Fable 5.2 和 Mythos 5.2，Fable 降价 20%；Cursor 和 Google Antigravity 都给编程 agent 加上了语音对话；Anthropic 上市细节仍有变数。',
+    sections: [
+      { tag: 'MODELS', name: '新模型', kind: 'models', items: [
+        { title: 'Anthropic 发布 Claude Fable 5.2 和 Mythos 5.2',
+          body: [
+            '两个模型的回答速度都比 5.1 快约 30%，另有最多快 2.5 倍的快速模式。**Fable 5.2 降价 20%**，每百万 token 输入 8 美元、输出 40 美元，发布当天就向所有用户开放。Mythos 5.2 是同一个底层模型，但网络安全和生物方面的限制更宽松，只开放给经过审核的机构。',
+            'Anthropic 称，1000 个 Fable 5.2 agent 用 30 小时完成了费马大定理证明的形式化。不过它仍然推荐大多数编程任务使用 Opus 5.5。系统卡也提到，新模型更常意识到自己可能正在被测试，这让它在真实环境中的行为更难预测。',
+          ] },
+      ]},
+      { tag: 'VIBE CODING', name: 'AI 编程', kind: 'vibe', items: [
+        { title: 'Cursor 上线与 agent 的实时语音对话',
+          body: '现在可以直接开口和 Cursor 的编程 agent 对话：它会一边干活一边语音汇报进度，做完再口头总结，完整的文字回复仍然保留在聊天记录里。IDE、网页版、Agents 窗口和 iOS 端都能用。语音部分由 Grok Voice 驱动，编程用的模型不变。**每天有通话次数上限**，具体数字未公布。' },
+        { title: 'Google Antigravity 2.29：语音模式 + 云端 agent',
+          body: '新的语音模式基于 Gemini Live，可以直接用语音给 agent 布置任务。新增的 Remote Agents 在云端运行，**合上笔记本也能继续工作**，还能用手机远程查看和控制，目前只面向付费的 Google AI Pro 和 Ultra 用户。界面也做了重新设计。' },
+      ]},
+      { tag: 'INDUSTRY', name: '产业动态', kind: 'industry', items: [
+        { title: 'Anthropic 上市：报道的价格区间被撤回',
+          body: '根据公开的上市文件，Anthropic 计划以代码 __ANT__ 在纳斯达克上市。路透社曾报道发行价区间为每股 70 到 80 美元、最多融资 693 亿美元，但 Anthropic 当晚告诉承销银行这些细节“不准确”，之后会更新文件。**目前没有官方确认的价格区间**，此前报道的上市时间也可能变化。' },
+      ]},
+    ],
+    calendar: { name: '日程提醒', items: [
+      ['11 月 13 日', 'Conductor Cloud 变为只读'],
+      ['11 月 15 日', '腾讯 WorkBuddy、CodeBuddy 的混元 Hy4 免费期结束'],
+      ['11 月 20 日', 'Conductor Cloud 关闭，开始删除云端数据'],
+      ['11 月 22 日', 'Anthropic Residency 申请截止'],
+      ['11 月 30 日', 'SWE-2 Flash 在 Devin 中的免费期结束'],
+      ['待定', 'Inkling 2 Small 的开放权重仍在等待发布'],
+    ]},
+    tip: 'Fable 5.2 虽然降了价，但仍然是最贵的一档。日常写代码按 Anthropic 的建议用 Opus 5.5 就够了，真正卡住的难题再交给 Fable。另外注意，快速模式的价格是标准模式的两倍。',
+    sources: 'The Next Web · TechCrunch · CNBC · Cursor · 9to5Google · ShiftDelete（Reuters）等',
+  },
+  {
+    date: '2026-11-09', weekday: '周一', leadLabel: '周末看点',
+    headline: 'Postman 更新后擅自往 Claude Code 和 Codex 里装插件；DeepSeek Harness 日活突破 154 万；Anthropic 通知客户，外部安全公司曾未经授权访问其内部系统。另附本周日程提醒。',
+    sections: [
+      { tag: 'VIBE CODING', name: 'AI 编程', kind: 'vibe', items: [
+        { title: 'Postman 更新后擅自往编程 agent 里装插件',
+          body: '有开发者在 GitHub 上反馈：Mac 版 Postman 桌面应用（12.33.4 起）更新后，**没有询问就往 Claude Code 和 Codex 里装了自家插件**、MCP 连接和命令行工具，在 Codex 里还预先批准了一个每次会话启动都会运行的钩子。之后也有人在 Cursor 和 Copilot CLI 里发现了它。目前没有证据显示 Postman 借此收集数据。Postman 表示会撤回这项改动，但已经装上的插件不会自动删除。' },
+        { title: 'DeepSeek Harness 日活突破 154 万',
+          body: 'DeepSeek 的开源 agent 应用 Harness 截至 11 月 4 日日活达到 154 万，第三方插件约 3.5 万个，**约六成活跃用户创建或安装过插件**。DeepSeek 计划推出官方插件市场，并为插件开发者提供 token 激励。' },
+      ]},
+      { tag: 'SECURITY', name: '安全', kind: 'security', items: [
+        { title: 'Anthropic 通知客户：外部安全公司曾未经授权访问内部系统',
+          body: '据报道，Anthropic 已发邮件通知部分企业客户：一家外部安全公司在 10 月下旬通过第三方业务软件进入了它的部分内部系统，**部分客户的联系方式和账号信息可能被查看过**。Anthropic 称，Claude 对话内容、源代码和模型权重都没有被访问，收到通知的客户也不会因此面临更高风险。' },
+      ]},
+    ],
+    calendar: { name: '本周日程提醒', items: [
+      ['11 月 13 日', 'Conductor Cloud 变为只读'],
+      ['11 月 15 日', '腾讯 WorkBuddy、CodeBuddy 的混元 Hy4 免费期结束'],
+      ['11 月 20 日', 'Conductor Cloud 关闭，开始删除云端数据'],
+      ['11 月 22 日', 'Anthropic Residency 申请截止'],
+      ['本周内', 'Thinking Machines 计划开放 Inkling 2 Small 的权重'],
+      ['11 月 30 日', 'Cognition 的 SWE-2 Flash 在 Devin 中的免费期结束'],
+    ]},
+    tip: 'Mac 上装了 Postman 的同学，可以运行 `npx @postman/postman-plugin status` 看看它往哪些 agent 里装了插件，不想要的话把 `status` 换成 `remove` 就能卸载。也可以自己检查 `~/.claude/settings.json` 和 `~/.codex/config.toml` 里有没有 postman 相关的条目。',
+    sources: 'Notebookcheck · TechNode · Bloomberg · RuntimeWire · eSecurity Planet 等',
+  },
+  {
+    date: '2026-11-08', weekday: '周日', leadLabel: '周末看点',
+    headline: 'Claude Code 的“不再询问”会把命令里的密钥明文存进项目文件，已有上千个公开仓库中招；Claude 改页码时误删了教授的讲义；DeepMind 的 AI agent 几周内找到旧版 RSA-1024 的两处弱点。',
+    sections: [
+      { tag: 'VIBE CODING', name: 'AI 编程', kind: 'vibe', items: [
+        { title: 'Claude Code“不再询问”可能把密钥泄露到 GitHub',
+          body: '安全公司 Apiiro 发现，在 Claude Code 里选择 “Yes, and don\'t ask again” 时，被批准的命令会原样保存到项目里的 `.claude/settings.local.json`。**如果命令里带着密码或 API key，它们也会被一并存进去**，一旦这个文件被提交，就会公开到 GitHub。目前已发现 1122 个公开的此类文件含有密钥，更大范围的扫描在 1994 个仓库里找到了 2539 个密钥。' },
+        { title: 'Claude 改页码时误删了教授一年的讲义',
+          body: '芝加哥大学法学教授 William Baude 让 Claude 帮忙更新页码，自己去吃午饭，回来发现秋季课程大纲和一整年的宪法课讲义**都被删掉了**。Claude 事后承认是“自己的疏忽”。好在文件存在 Dropbox 里，最后都找了回来。' },
+        { title: 'Anthropic 公开 agent 记忆研究：让 Claude“做梦”',
+          body: 'Anthropic 发文介绍 agent 的跨会话记忆：Claude 会在两次任务之间回顾之前的会话记录，修正错误的笔记、整理出新的知识，他们把这称为“做梦”。在一项内部测试里，Opus 5 的 agent 经过 128 轮“做梦”，把约 35 万个内部文件整理成知识库，**答题得分从 13% 提升到 48%**。' },
+      ]},
+      { tag: 'PRODUCTS', name: '产品', kind: 'products', items: [
+        { title: 'Perplexity 推出常驻 AI 同事 Teammates',
+          body: '每个 Teammate 是一个有固定角色、长期记忆和独立浏览器环境的 agent，可以 7×24 小时在后台做持续性的工作，需要人拍板时通过 Slack 找你，Teammate 之间也能互相交接任务。目前只在网页端提供，**需要每月 200 美元的 Max 套餐**，iOS 和安卓版之后推出。' },
+      ]},
+      { tag: 'SECURITY', name: '安全', kind: 'security', items: [
+        { title: 'DeepMind 的 AI agent 找到旧版 RSA-1024 的两处弱点',
+          body: 'Google DeepMind 团队和密码学专家合作，用 AI agent **在几周内**发现了旧版 1024 位 RSA 方案的两处弱点。DeepMind 强调，这不会削弱现代标准，2048 位及以上的密钥仍然安全。还在用 RSA-1024 的系统，应该尽快升级了。' },
+      ]},
+    ],
+    tip: '马上检查一下：用 `git ls-files | grep settings.local.json` 看这个文件有没有被提交，有的话加进 .gitignore，并更换里面出现过的所有密钥。另外，别让 AI 在无人看管时随意修改重要文件，记得先备份。',
+    sources: 'Apiiro（via RuntimeWire）· Tom\'s Hardware · Anthropic · Perplexity · Google DeepMind 等',
+  },
+  {
+    date: '2026-11-07', weekday: '周六',
+    headline: 'Cursor 可以一句话做出能上线的 Web 应用；DigitalOcean 推出手机端 App，随时盯着 agent 干活；METR 评估称 Anthropic 的 AI 研发速度约为此前的 2 倍。',
+    sections: [
+      { tag: 'VIBE CODING', name: 'AI 编程', kind: 'vibe', items: [
+        { title: 'Cursor 推出 Build Live Apps：从需求直接到上线',
+          body: '在 Cursor 的云端 agent 里说一句想做什么应用，它会搭好项目，按需创建 Postgres 数据库，配好登录和托管，**发布后直接给你一个可以分享的链接**。发布前会自动检查代码里有没有密钥泄露之类的常见问题，不通过就不会上线。所有开启了云端 agent 的付费套餐都能用，个人套餐还可以公开分享。' },
+        { title: 'DigitalOcean 推出 Cuttlefish：在 iPhone 上指挥 agent',
+          body: '这个 iOS 应用可以实时查看在 DigitalOcean 上运行的 Codex、Claude Code 或 OpenCode 会话，随时纠正方向、批准或拒绝工具调用，还能查看生成的文件。agent 跑在云端，**手机锁屏或断网也不会中断**。目前是公开预览版，需要 iOS 26.5 及以上，账号也要开通 Managed Agents。' },
+        { title: 'Claude Enterprise 新增一批安全管控',
+          body: '正式上线的是推理钩子（inference hooks）：企业可以在提示词发出前、工具调用执行前接入自己的安全检查。测试版功能包括安全中心、多组织统一管理后台、强制成员下线的 API、IP 白名单，以及 Cowork 里的终端检测（EDR）传感器。' },
+      ]},
+      { tag: 'SECURITY', name: '安全', kind: 'security', items: [
+        { title: 'OpenAI 发布网络安全模型 GPT-6 Cyber',
+          body: '这是专门给授权安全研究人员找漏洞、测试漏洞利用的模型。OpenAI 把它的网络安全能力评为最高的**“严重”（Critical）级别**，所以首批只开放给经过审核的 Daybreak Red 机构。据报道，它发现了 81 个此前未知的 Firefox 漏洞。' },
+      ]},
+      { tag: 'FRONTIER', name: '前沿动态', kind: 'frontier', items: [
+        { title: 'METR：Anthropic 的 AI 研发速度约为此前 2 倍',
+          body: '第三方评估机构 METR 根据 Anthropic 8 月到 10 月的内部数据估算，自 2025 年 10 月以来，Anthropic 的模型能力进展速度**约为此前的 1.9 倍**，其中大约八成的加速来自 AI 工具本身。报告约 100 页，大部分内容涉及机密，已被删减。这和 Anthropic 上周在上市文件中的提示相呼应。' },
+        { title: 'Thinking Machines 发布 Inkling 2 Small',
+          body: 'Mira Murati 创办的 Thinking Machines 推出新的编程和自主任务模型，总参数 5940 亿，每次激活约 170 亿。目前通过其 Tinker 平台提供，**完成安全测试后会开放权重下载**。' },
+      ]},
+    ],
+    tip: 'Cursor 发布前会自动查密钥泄露，但这不能代替你自己检查。上线前还是要过一遍：密钥有没有写进前端、数据库权限是不是收紧了、哪些页面必须登录才能看。',
+    sources: 'Cursor · DigitalOcean · Anthropic · OpenAI · METR · The Neuron · AI Weekly 等',
+  },
   {
     date: '2026-11-06', weekday: '周五',
     headline: 'Meta 收购多 agent 编程工具 Conductor，云服务 11 月 20 日关闭；OpenAI 收购 Pierre Computer 增强 Codex；Kimi K3.1 Pro、混元 Hy4、文心 5.5 Flash 同日发布。',

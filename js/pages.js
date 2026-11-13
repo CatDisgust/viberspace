@@ -26,7 +26,11 @@ const PAGES = {
   news(sub) {
     const n = NEWS.find(x => x.date === sub) || NEWS[0];
     const d = parseDate(n.date);
-    const rich = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<mark>$1</mark>').replace(/`(.+?)`/g, '<code>$1</code>');
+    // **高亮**、__加粗__、`代码`；代码先拆出来，里面的符号不再处理
+    const rich = t => esc(t).split(/(`[^`]+`)/).map(part => part.startsWith('`') && part.endsWith('`') && part.length > 1
+      ? `<code>${part.slice(1, -1)}</code>`
+      : part.replace(/\*\*(.+?)\*\*/g, '<mark>$1</mark>').replace(/__(.+?)__/g, '<b>$1</b>')).join('');
+    const paras = b => (Array.isArray(b) ? b : [b]).map(x => `<p>${rich(x)}</p>`).join('');
     let k = 0;
     return `
       <div class="brief">
@@ -37,20 +41,25 @@ const PAGES = {
             <span class="paper-date sg">${fmtDate(d)}</span>
           </header>
           <div class="paper-sub"><span>AI DAILY BRIEF</span><span>USYD Vibe Coding Club</span></div>
-          <p class="brief-lead"><b>今日看点</b>${esc(n.headline)}</p>
+          <p class="brief-lead"><b>${esc(n.leadLabel || '今日看点')}</b>${esc(n.headline)}</p>
           ${n.sections.map(sec => `
             <section class="brief-sec">
               <h3><span class="brief-tag k-${esc(sec.kind)}">${esc(sec.tag)}</span>${esc(sec.name)}</h3>
               <ol class="brief-items">${sec.items.map(it => { k++; return `
-                <li><span class="n-no">${String(k).padStart(2, '0')}</span><div><h4>${esc(it.title)}</h4><p>${rich(it.body)}</p></div></li>`; }).join('')}
+                <li><span class="n-no">${String(k).padStart(2, '0')}</span><div><h4>${esc(it.title)}</h4>${paras(it.body)}</div></li>`; }).join('')}
               </ol>
             </section>`).join('')}
+          ${n.calendar ? `
+            <section class="brief-sec">
+              <h3><span class="brief-tag k-calendar">CALENDAR</span>${esc(n.calendar.name || '日程提醒')}</h3>
+              <ul class="brief-cal">${n.calendar.items.map(([when, what]) => `<li><b>${esc(when)}</b><span>${rich(what)}</span></li>`).join('')}</ul>
+            </section>` : ''}
           ${n.tip ? `<aside class="brief-tip"><b>编辑提醒</b><p>${rich(n.tip)}</p></aside>` : ''}
           <footer class="brief-src"><b>USYD Vibe Coding Club 出品</b><span>信息来源：${esc(n.sources || '')} ｜ 整理于 ${n.date.replace(/-/g, '.')}</span></footer>
         </article>
 
         <aside class="issues">
-          <h3>往期早报</h3>
+          <h3>往期早报 <small>${NEWS.length} 期</small></h3>
           ${NEWS.map(x => { const xd = parseDate(x.date); return `
             <a class="issue${x === n ? ' on' : ''}" href="#/news/${x.date}">
               <span class="issue-d sg">${fmtDate(xd)}</span><span class="issue-w">${esc(x.weekday)}</span>
