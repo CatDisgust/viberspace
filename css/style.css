@@ -1,0 +1,120 @@
+:root {
+  --blue: #2F6DC2; --blue-d: #1F4E96; --pink: #F7A6BC; --yellow: #FFE600;
+  --glass: #CFE3F7; --green: #5CB87A; --park: #D6EE9C; --road: #EBEDF0;
+  --ink: #26303B; --muted: #6B7785; --red: #E8463B; --cream: #FFF8E6; --line: #E3E7EC;
+  --accent: var(--blue); --tint: #EAF2FC;
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: #fff; color: var(--ink);
+  font-family: "Noto Sans SC", system-ui, -apple-system, "PingFang SC", sans-serif;
+  font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased;
+}
+a { color: var(--blue); }
+[hidden] { display: none !important; }
+html, body { overflow-anchor: none; }   /* 关闭浏览器的滚动锚定，否则地图缩放时页面会被自动挪动 */
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.sg { font-family: "Rubik", sans-serif; font-weight: 900; letter-spacing: -.01em; }
+.hand { font-weight: 700; }  /* 标题用默认字体加粗；可爱字体只留给地图和建筑插画 */
+.muted { color: var(--muted); }
+code { background: #F1F4F8; padding: 1px 6px; border-radius: 5px; font-size: .9em; }
+
+/* ---------- 顶栏 ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 10px 24px; background: rgba(255,255,255,.92); backdrop-filter: blur(8px); border-bottom: 2px dashed var(--line);
+}
+.logo { display: inline-flex; align-items: center; gap: 6px; font-family: "Rubik", sans-serif; font-weight: 900; color: var(--blue); text-decoration: none; font-size: 22px; letter-spacing: -.02em; flex: none; }
+.logo img { width: 34px; height: 34px; margin: -4px 0; }
+#map .mascot { transform-box: fill-box; transform-origin: center; animation: bob 3.2s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-8px) rotate(4deg); } }
+
+
+/* ---------- 图片 / 大图查看 ---------- */
+[data-zoom] { cursor: zoom-in; border: 0; padding: 0; background: none; display: block; }
+.footer-logo { height: 40px; width: auto; display: block; }
+.lightbox { position: fixed; inset: 0; z-index: 60; background: rgba(20,26,33,.88); display: grid; place-items: center; padding: 24px; }
+.lightbox figure { margin: 0; max-width: min(1200px, 100%); text-align: center; }
+.lightbox img { max-width: 100%; max-height: calc(100vh - 110px); border-radius: 8px; display: block; margin: 0 auto; }
+.lightbox figcaption { color: #fff; margin-top: 12px; font-size: 15px; }
+.lb-close { position: absolute; top: 14px; right: 18px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; color: var(--ink); font-size: 26px; line-height: 1; cursor: pointer; }
+.stopnav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.stopnav a {
+  display: flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ink);
+  padding: 4px 10px 4px 4px; border-radius: 999px; font-size: 14px; white-space: nowrap; transition: background .2s;
+}
+.stopnav a span { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--blue); color: #fff; font-size: 13px; }
+.stopnav a em { font-style: normal; font-weight: 500; }
+.stopnav a:hover, .stopnav a.on { background: #EAF2FC; }
+.stopnav a.on span { background: var(--red); }
+
+/* ---------- 地图 ---------- */
+#mapView { padding-bottom: 0; }
+.map-scroll { width: 100%; }
+#map { display: block; width: 100%; height: auto; }
+#map .ttl { font-family: "Rubik", sans-serif; font-weight: 900; fill: var(--blue); letter-spacing: -4px; }
+#map .lbl-t { font-family: "ZCOOL KuaiLe", sans-serif; font-size: 30px; fill: var(--blue); }
+#map .lbl-en { font-family: "Rubik", sans-serif; font-weight: 700; font-size: 17px; fill: var(--blue); opacity: .7; }
+#map .lbl-s { font-family: "Noto Sans SC", sans-serif; font-size: 15px; fill: #8A95A3; }
+#map .sg { font-family: "Rubik", sans-serif; font-weight: 900; }
+#map .hand, .hero-bld .hand { font-family: "ZCOOL KuaiLe", sans-serif; font-weight: 400; }
+.stop { cursor: pointer; outline: none; }
+.stop .bld { transition: transform .35s cubic-bezier(.3,1.7,.5,1); }
+.stop:hover .bld, .stop:focus-visible .bld { transform: translateY(-10px); }
+.stop .pin { transition: transform .3s; }
+.stop:hover .pin path, .stop:focus-visible .pin path { fill: var(--red); }
+.stop:focus-visible .lbl-t { text-decoration: underline; }
+/* 开门动画 */
+.leaf { transform-box: fill-box; transition: transform .45s cubic-bezier(.5,0,.2,1); }
+.leaf-l { transform-origin: left center; }
+.leaf-r { transform-origin: right center; }
+.stop:hover .leaf-l { transform: scaleX(.82); }
+.stop:hover .leaf-r { transform: scaleX(.82); }
+.stop.open .leaf-l { transform: scaleX(.1) skewY(16deg); }
+.stop.open .leaf-r { transform: scaleX(.1) skewY(-16deg); }
+.door-glow { opacity: 0; transition: opacity .45s; pointer-events: none; }
+.stop.open .door-glow { opacity: .8; }
+.stop.noanim .leaf, .stop.noanim .door-glow { transition: none !important; }
+.stop.active .bld { transform: translateY(-10px); }
+#map .stop, #map .landmark, #map .bike { transition: opacity .5s; }
+#map.cam .stop:not(.active), #map.cam .landmark, #map.cam .bike { opacity: .35; }
+#map.cam .stop.active .lbl { opacity: 0; transition: opacity .3s; }
+#map.cam { pointer-events: none; }
+.veil { position: fixed; inset: 0; z-index: 15; background: #FFF3C4; opacity: 0; pointer-events: none; transition-property: opacity; transition-timing-function: ease; }
+.veil.on { opacity: 1; }
+.page { animation: pageIn .5s ease both; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(14px); } }
+.route path { animation: march 1.4s linear infinite; }
+@keyframes march { to { stroke-dashoffset: -18; } }
+.ripple { animation: flow 6s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -116; } }
+.bike { transition: transform .6s; }
+.landmark { cursor: pointer; outline: none; }
+.map-hint { display: none; text-align: center; color: var(--muted); font-size: 13px; margin: 6px 0 0; }
+
+
+/* ---------- 页脚 / toast ---------- */
+.footer { border-top: 2px dashed var(--line); padding: 20px 0; color: var(--muted); font-size: 14px; }
+.footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.footer .logo { font-size: 18px; }
+.toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 15px; transition: .3s; z-index: 50; max-width: calc(100% - 32px); text-align: center; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+
+/* ---------- 响应式（顶栏和地图；子页面见 pages.css） ---------- */
+@media (max-width: 960px) {
+  .stopnav a em { display: none; }
+  .stopnav a { padding: 4px; }
+}
+@media (max-width: 720px) {
+  .wrap { padding: 0 16px; }
+  .topbar { padding: 10px 16px; }
+  .logo { font-size: 18px; }
+  .map-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  #map { width: 880px; max-width: none; }
+  .map-hint { display: block; margin: 0; padding: 8px 0; background: #EAF2FC; color: var(--blue); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

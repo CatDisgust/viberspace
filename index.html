@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ViberSpace · Vibe Coding 社团</title>
+  <meta name="description" content="ViberSpace 是一个 Vibe Coding 社团：AI 早报、作品展示、活动、入门教程与 VibeWiki。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;900&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="icon" type="image/png" href="assets/logo/favicon.png">
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="#/"><img src="assets/logo/icon.png" alt="" width="34" height="34">VIBERSPACE</a>
+    <nav class="stopnav" id="stopnav" aria-label="站点导航"></nav>
+  </header>
+
+  <main>
+    <section id="mapView">
+      <p class="map-hint">← 左右滑动看地图 · 点击建筑进入 →</p>
+      <div class="map-scroll">
+        <svg id="map" viewBox="0 0 1600 1200" role="img" aria-label="ViberSpace 社团地图"></svg>
+      </div>
+    </section>
+
+    <section id="pageView" hidden></section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <img class="footer-logo" src="assets/logo/horizontal.png" alt="ViberSpace">
+      <span>USYD Vibe Coding Club · Vibe Your Own Product! · © 2026</span>
+    </div>
+  </footer>
+
+  <div class="veil" id="veil" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="图片大图">
+    <button class="lb-close" aria-label="关闭">×</button>
+    <figure><img alt=""><figcaption></figcaption></figure>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/pages.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
